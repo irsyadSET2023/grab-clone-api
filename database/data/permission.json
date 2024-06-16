@@ -1,0 +1,12 @@
+[
+    {
+        "name": "manage restaurant registration",
+        "guard_name": "api",
+        "permission_type": 1
+    },
+    {
+        "name": "manage restaurant orders",
+        "guard_name": "api",
+        "permission_type": 1
+    }
+]

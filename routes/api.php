@@ -1,7 +1,7 @@
 <?php
 
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,13 +16,15 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::prefix('auth')->group(function () {
-    Route::post('/register', [UserController::class, 'register']);
-    Route::post('/login', [UserController::class, 'login']);
+    Route::post('/register', [AuthController::class, 'register']);
+    Route::post('/register/manager', [AuthController::class, 'registerRestaurantManager']);
+
+    Route::post('/login', [AuthController::class, 'login']);
     Route::middleware(['auth:sanctum'])->group(function () {
-        Route::get('logout', [UserController::class, 'logout']);
+        Route::get('logout', [AuthController::class, 'logout']);
     });
 });
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+Route::middleware('auth:sanctum')->prefix('user')->group(function () {
+    Route::get('my-account', [UserController::class, 'myAccount']);
 });
