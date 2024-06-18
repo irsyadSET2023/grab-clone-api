@@ -1,3 +1,26 @@
-{
-    "data": ["Asian", "Western", "Dessert", "Coffee", "Pastry", "Tea"]
-}
+[
+    {
+        "name": "Asian"
+    },
+    {
+        "name": "Western"
+    },
+    {
+        "name": "Dessert"
+    },
+    {
+        "name": "Coffee"
+    },
+    {
+        "name": "Pastry"
+    },
+    {
+        "name": "Tea"
+    },
+    {
+        "name": "Malay"
+    },
+    {
+        "name": "Thai"
+    }
+]

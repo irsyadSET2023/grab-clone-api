@@ -28,7 +28,7 @@ class RegisterRestaurantManagerRequest extends FormRequest
             'email' => 'required|email|unique:grabclone.users,email',
             'password' => 'required|confirmed|min:8',
             'restaurant_name' => 'required|min:5',
-            'organization_number' => 'required|numeric|size:12'
+            'organization_number' => 'required|numeric|digits:12'
 
         ];
     }

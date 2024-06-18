@@ -11,7 +11,6 @@ class UserController extends Controller
     public function myAccount()
     {
         $user = Auth::user();
-
         return $this->sendResponse("My account", $user, 200);
     }
 }

@@ -10,9 +10,7 @@ use App\Models\Tenant;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use PhpParser\Node\Stmt\TryCatch;
 
 class AuthController extends Controller
 {
@@ -50,21 +48,22 @@ class AuthController extends Controller
     {
         $userData = $registerRestaurantManagerRequest->except(["restaurant_name", "organization_number"]);
         $restaurantData = $registerRestaurantManagerRequest->only(["restaurant_name", "organization_number"]);
+        $userData["password"] = Hash::make($userData["password"]);
+        $user = User::create($userData);
+        $tenantCount = Tenant::count();
+        $tenant = Tenant::create([
+            'name' => $restaurantData["restaurant_name"],
+            'database' => 'grabclone_tenant_' . ($tenantCount + 1)
+        ]);
 
-        // $user = User::create($userData);
-        // Restaurant::create([
-        //     "name" => $restaurantData["restaurant_name"],
-        //     "owner_id" => $user->id,
-        //     "organization_number" => $restaurantData["organization_number"]
-        // ]);
+        Restaurant::create([
+            "tenant_id" => $tenant->id,
+            "name" => $restaurantData["restaurant_name"],
+            "owner_id" => $user->id,
+            "organization_number" => $restaurantData["organization_number"]
+        ]);
 
-        // $tenantCount = Tenant::count();
-        // Tenant::create([
-        //     'name' => $restaurantData["restaurant_name"],
-        //     'database' => 'grabclone_tenant_' . ($tenantCount + 1)
-        // ]);
-        CreateTenantJob::dispatch($userData, $restaurantData);
-
+        CreateTenantJob::dispatch($tenant->database, $tenant->id, $user->toArray());
         return $this->sendResponse("User and restaurant registered", null, 200);
     }
 

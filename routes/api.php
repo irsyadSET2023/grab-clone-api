@@ -1,6 +1,10 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\CustomerRestaurantController;
+use App\Http\Controllers\ManagerRestaurantController;
+use App\Http\Controllers\RestaurantController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -25,6 +29,24 @@ Route::prefix('auth')->group(function () {
     });
 });
 
+Route::middleware(['auth:sanctum', 'tenant'])->prefix('manager')->group(function () {
+    Route::put('/assign-category', [ManagerRestaurantController::class, 'assignCategories']);
+    Route::post('/add-menu', [ManagerRestaurantController::class, 'addMenu']);
+    Route::post('/remove-menu', [ManagerRestaurantController::class, 'removeMenu']);
+});
+
+Route::prefix('customer')->group(function () {
+    Route::get('/restaurant', [CustomerRestaurantController::class, 'index']);
+    Route::get('/restaurant/{restaurant}', [CustomerRestaurantController::class, 'show']);
+    Route::middleware('auth:sanctum')->prefix('cart')->group(function () {
+        Route::post('/add-item/{restaurant}', [CustomerRestaurantController::class, 'addToCart']);
+        Route::post('/checked-out-cart/{restaurant}', [CustomerRestaurantController::class, 'checkedOutCart']);
+    });
+});
+
+
 Route::middleware('auth:sanctum')->prefix('user')->group(function () {
     Route::get('my-account', [UserController::class, 'myAccount']);
 });
+
+Route::get('/category', CategoryController::class);

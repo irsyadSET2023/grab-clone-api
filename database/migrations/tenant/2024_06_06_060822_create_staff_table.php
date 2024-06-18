@@ -19,8 +19,8 @@ class CreateStaffTable extends Migration
             $table->id();
             $table->foreignId('user_id')->references('id')->on($db . '.users')->constrained()->onDelete('cascade');
             $table->string("name");
-            $table->string("start_date");
-            $table->string("commencement_date");
+            $table->timestamp("start_date")->nullable();
+            $table->timestamp("commencement_date")->nullable();
             $table->timestamps();
         });
     }

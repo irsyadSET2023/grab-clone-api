@@ -15,9 +15,9 @@ class CreateRestaurantsTable extends Migration
     public function up()
     {
         Schema::create('restaurants', function (Blueprint $table) {
-            $db = DB::connection('grabclone')->getDatabaseName();
+            $dbGrabclone = DB::connection('grabclone')->getDatabaseName();
             $table->id();
-            $table->foreignId('owner_id')->references('id')->on($db . '.users')->constrained()->onDelete('cascade');
+            $table->foreignId('owner_id')->references('id')->on($dbGrabclone . '.users')->constrained()->onDelete('cascade');
             $table->string('name');
             $table->string('organization_number');
             $table->boolean('application_status')->default(0);

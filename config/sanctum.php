@@ -62,4 +62,8 @@ return [
         'encrypt_cookies' => App\Http\Middleware\EncryptCookies::class,
     ],
 
+
+    // Specify the custom model if necessary
+    'personal_access_token_model' => \App\Models\PersonalAccessToken::class,
+
 ];
