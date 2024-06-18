@@ -3,10 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Support\Facades\Artisan;
 use Spatie\Multitenancy\Models\Tenant as SpatieTenant;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 
 class Tenant extends SpatieTenant
 {
@@ -36,10 +33,11 @@ class Tenant extends SpatieTenant
         static::creating(function ($tenant) {
             $tenant->tenant_identifier = self::generateUniqueIdentifier();
         });
+    }
 
-        // static::created(function ($tenant) {
-        //     $tenant->createDatabase($tenant->id);
-        // });
+    public function getRouteKeyName()
+    {
+        return 'tenant_identifier';
     }
 
     /**
@@ -55,26 +53,4 @@ class Tenant extends SpatieTenant
 
         return $identifier;
     }
-
-    /**
-     * Create the tenant database.
-     *
-     * @return void
-     */
-    // public function createDatabase($tenantId)
-    // {
-    //     $dbName = $this->database;
-    //     try {
-    //         DB::statement("CREATE DATABASE $dbName");
-    //         // Tenant::find($tenantId)->makeCurrent();
-    //         Artisan::call('tenants:artisan', [
-    //             'artisanCommand' => 'migrate:fresh --path=database/migrations/tenant --force',
-    //             '--tenant' => $this->id
-    //         ]);
-    //         Log::info("Database created successfully", ["database" => $dbName]);
-    //     } catch (\Exception $e) {
-    //         Log::error("Failed to create database", ["database" => $dbName, "error" => $e->getMessage()]);
-    //         throw $e;
-    //     }
-    // }
 }

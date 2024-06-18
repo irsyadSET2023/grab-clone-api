@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 use Auth;
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class CompanyTenantFinder
 {
@@ -20,11 +21,11 @@ class CompanyTenantFinder
         if (Auth::check()) {
             $employment = Auth::user()->employment;
             if (is_null($employment)) {
-                return $next($request);
+                return response()->json(['error' => 'Unauthorized'], 401);
             }
             $employment->tenant->makeCurrent();
+            return $next($request);
         }
-
-        return $next($request);
+        return response()->json(['error' => 'Unauthenticated'], 401);
     }
 }
